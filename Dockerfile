@@ -87,9 +87,8 @@ RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.or
                     optuna stable-baselines3 h5py scikit-learn \
                     scipy matplotlib nni sphinx-rtd-theme \
                     imageio imageio-ffmpeg opencv-python kornia einops \
-                    ghp-import optimum \
-                    pytest-cov pytest-xdist pytest-sugar pytest-html \
-                    pytest-profiling
+                    ghp-import optimum pytest-profiling myst_parser \
+                    pytest-cov pytest-xdist pytest-sugar pytest-html
 
 # Add environment variables
 ENV vhls $VHLS_PATH

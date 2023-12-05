@@ -14,7 +14,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 # Install basic packages 
 RUN apt-get upgrade -y 
 RUN apt-get update -y \
-    && apt-get install -y clang cmake graphviz-dev libclang-dev \
+    && apt-get install -y clang graphviz-dev libclang-dev \
                           pkg-config g++ libxtst6 xdg-utils \
                           libboost-all-dev llvm gcc ninja-build \
                           python3 python3-pip build-essential \
@@ -37,6 +37,7 @@ RUN apt-get update -y \
                           ccache libgoogle-perftools-dev numactl \
                           perl-doc libfl2 libfl-dev zlib1g zlib1g-dev \
                           help2man
+# Install Verilator from source
 RUN mkdir -p /srcPkgs \
     && cd /srcPkgs \
     && git clone https://github.com/verilator/verilator \ 
@@ -45,7 +46,18 @@ RUN mkdir -p /srcPkgs \
     && git checkout v5.006 \
     && autoconf \
     && ./configure \
-    && make -j \
+    && make -j 4 \
+    && make install
+
+# Install latest Cmake from source
+RUN mkdir -p /srcPkgs \
+    && cd /srcPkgs \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz \ 
+    && mkdir -p cmake \
+    && tar xzvf cmake-*.tar.gz -C cmake --strip-components 1 \
+    && cd cmake \
+    && ./bootstrap --prefix=/usr/local \
+    && make -j 4 \
     && make install
 
 # Append any packages you need here
@@ -94,7 +106,7 @@ RUN printf "\
 \nexport XLNX_VERSION=2023.1 \
 \n# source ${vhls}/Vitis_HLS/\$XLNX_VERSION/settings64.sh \
 \n# MLIR-AIE PATH setup \
-\nexport PATH=/workspace/mlir-aie/install/bin:/workspace/mlir-air/install/bin:\$PATH \
+\nexport PATH=/srcPkgs/cmake/bin:/workspace/hls/build/bin:/workspace/llvm/build/bin:/workspace/mlir-aie/install/bin:/workspace/mlir-air/install/bin:\$PATH \
 \nexport PYTHONPATH=/workspace/mlir-aie/install/python:/workspace/mlir-air/install/python:\$PYTHONPATH \
 \nexport LD_LIBRARY_PATH=/workspace/mlir-aie/lib:/workspace/mlir-air/lib:/opt/xaiengine:\$LD_LIBRARY_PATH \
 \n# Thread setup \

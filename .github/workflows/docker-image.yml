@@ -18,7 +18,7 @@ jobs:
       run: |
         TAG=$(date -u +%Y%m%d%H%M%S)
         echo ${{secrets.MASE_DOCKER_CRED}} | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
-        docker build --build-arg UID=1001 --build-arg GID=1000 --build-arg VHLS_PATH=. -f Dockerfile --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . 
+        docker build --build-arg VHLS_PATH=. -f Dockerfile --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . 
         docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
         docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
         docker push ghcr.io/${{github.repository}}/mase-ci-build:latest

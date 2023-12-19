@@ -34,27 +34,27 @@ RUN apt-get update -y \
                           perl-doc libfl2 libfl-dev zlib1g zlib1g-dev \
                           help2man
 # Install Verilator from source
-# RUN mkdir -p /srcPkgs \
-#     && cd /srcPkgs \
-#     && git clone https://github.com/verilator/verilator \ 
-#     && unset VERILATOR_ROOT \
-#     && cd verilator \
-#     && git checkout v5.006 \
-#     && autoconf \
-#     && ./configure \
-#     && make -j 4 \
-#     && make install
+RUN mkdir -p /srcPkgs \
+    && cd /srcPkgs \
+    && git clone https://github.com/verilator/verilator \ 
+    && unset VERILATOR_ROOT \
+    && cd verilator \
+    && git checkout v5.006 \
+    && autoconf \
+    && ./configure \
+    && make -j 4 \
+    && make install
 
 # Install latest Cmake from source
-# RUN mkdir -p /srcPkgs \
-#     && cd /srcPkgs \
-#     && wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz \ 
-#     && mkdir -p cmake \
-#     && tar xzvf cmake-*.tar.gz -C cmake --strip-components 1 \
-#     && cd cmake \
-#     && ./bootstrap --prefix=/usr/local \
-#     && make -j 4 \
-#     && make install
+RUN mkdir -p /srcPkgs \
+    && cd /srcPkgs \
+    && wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz \ 
+    && mkdir -p cmake \
+    && tar xzvf cmake-*.tar.gz -C cmake --strip-components 1 \
+    && cd cmake \
+    && ./bootstrap --prefix=/usr/local \
+    && make -j 4 \
+    && make install
 
 # Append any packages you need here
 # RUN apt-get ...

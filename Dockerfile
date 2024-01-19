@@ -1,4 +1,4 @@
-# This Dockerfile configures a Docker environment that 
+# This Dockerfile configures a Docker environment that
 # contains all the required packages for the tool
 FROM ubuntu:22.04
 ARG VHLS_PATH
@@ -7,8 +7,8 @@ USER root
 RUN apt-get update -y && apt-get install apt-utils -y
 RUN DEBIAN_FRONTEND="noninteractive" apt-get -y install tzdata
 
-# Install basic packages 
-RUN apt-get upgrade -y 
+# Install basic packages
+RUN apt-get upgrade -y
 RUN apt-get update -y \
     && apt-get install -y clang graphviz-dev libclang-dev \
                           pkg-config g++ libxtst6 xdg-utils \
@@ -27,7 +27,7 @@ RUN mkdir -p /srcPkgs \
     && wget https://github.com/chipsalliance/verible/releases/download/v0.0-2776-gbaf0efe9/verible-v0.0-2776-gbaf0efe9-Ubuntu-22.04-jammy-x86_64.tar.gz \
     && mkdir -p verible \
     && tar xzvf verible-*-x86_64.tar.gz -C verible --strip-components 1
-# Install verilator from source - version v5.006 
+# Install verilator from source - version v5.020
 RUN apt-get update -y \
     && apt-get install -y git perl make autoconf flex bison \
                           ccache libgoogle-perftools-dev numactl \
@@ -36,10 +36,10 @@ RUN apt-get update -y \
 # Install Verilator from source
 RUN mkdir -p /srcPkgs \
     && cd /srcPkgs \
-    && git clone https://github.com/verilator/verilator \ 
+    && git clone https://github.com/verilator/verilator \
     && unset VERILATOR_ROOT \
     && cd verilator \
-    && git checkout v5.006 \
+    && git checkout v5.020 \
     && autoconf \
     && ./configure \
     && make -j 4 \
@@ -48,7 +48,7 @@ RUN mkdir -p /srcPkgs \
 # Install latest Cmake from source
 RUN mkdir -p /srcPkgs \
     && cd /srcPkgs \
-    && wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz \ 
+    && wget https://github.com/Kitware/CMake/releases/download/v3.28.0-rc5/cmake-3.28.0-rc5.tar.gz \
     && mkdir -p cmake \
     && tar xzvf cmake-*.tar.gz -C cmake --strip-components 1 \
     && cd cmake \
@@ -74,7 +74,7 @@ RUN apt install -y python3.11-dev
 CMD ["bash"]
 
 # Install PyTorch and Torch-MLIR
-RUN pip3 install --upgrade pip 
+RUN pip3 install --upgrade pip
 RUN pip3 install --pre torch-mlir torchvision \
     -f https://llvm.github.io/torch-mlir/package-index/ \
     --extra-index-url https://download.pytorch.org/whl/nightly/cpu
@@ -126,4 +126,3 @@ RUN printf "\
 \nautocmd BufWritePost *.v  silent! !verible-verilog-format --inplace <afile> \
 \nautocmd BufWritePost * redraw! \
 \n" >> /root/.vimrc
-

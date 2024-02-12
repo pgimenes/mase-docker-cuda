@@ -21,7 +21,7 @@ jobs:
         docker build --build-arg VHLS_PATH=/mnt/applications/Xilinx/23.1 \
         --build-arg VHLS_VERSION=2023.1 \
         -f Dockerfile \
-        --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . 
+        --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . || exit 1
 
         # Push to ghcr
         docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG

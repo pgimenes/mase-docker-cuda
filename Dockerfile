@@ -1,7 +1,6 @@
 # This Dockerfile configures a Docker environment that 
 # contains all the required packages for the tool
 FROM ubuntu:22.04
-ARG VHLS_PATH
 
 USER root
 RUN apt-get update -y && apt-get install apt-utils -y
@@ -92,15 +91,16 @@ RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.or
     && pip install -U Pillow
 
 # Add environment variables
-ENV vhls $VHLS_PATH
+ARG VHLS_PATH
+ARG VHLS_VERSION
 RUN printf "\
 \nexport LIBRARY_PATH=/usr/lib/x86_64-linux-gnu:\$LIBRARY_PATH \
 \n# Basic PATH setup \
 \nexport PATH=/workspace/scripts:/workspace/hls/build/bin:/workspace/llvm/build/bin:\$PATH:/srcPkgs/verible/bin \
 \n# Vitis HLS setup \
 \nexport VHLS=${vhls} \
-\nexport XLNX_VERSION=2023.1 \
-\n# source ${vhls}/Vitis_HLS/\$XLNX_VERSION/settings64.sh \
+\nexport XLNX_VERSION=\$XLNX_VERSION \
+\n# source \$VHLS_PATH/Vitis_HLS/\$XLNX_VERSION/settings64.sh \
 \n# MLIR-AIE PATH setup \
 \nexport PATH=/srcPkgs/cmake/bin:/workspace/hls/build/bin:/workspace/llvm/build/bin:/workspace/mlir-aie/install/bin:/workspace/mlir-air/install/bin:\$PATH \
 \nexport PYTHONPATH=/workspace/machop:/workspace/mlir-aie/install/python:/workspace/mlir-air/install/python:\$PYTHONPATH \
@@ -112,6 +112,7 @@ RUN printf "\
 \nexport LS_COLORS='rs=0:di=01;96:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01' \
 \nalias ls='ls --color' \
 \nalias grep='grep --color'\n" >> /root/.bashrc
+
 #Add vim environment
 RUN printf "\
 \nset autoread \

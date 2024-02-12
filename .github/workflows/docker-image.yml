@@ -30,6 +30,7 @@ jobs:
 
         # Push to dockerhub
         echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
+        docker tag ghcr.io/${{github.repository}}/mase-ci-build:latest docker.io/deepwok/mase-docker:$TAG
         docker push docker.io/deepwok/mase-docker:$TAG
         docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest
         docker push docker.io/deepwok/mase-docker:latest

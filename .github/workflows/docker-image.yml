@@ -3,6 +3,8 @@ name: Docker Image Build
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
 
@@ -21,7 +23,12 @@ jobs:
         -f Dockerfile \
         --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . 
 
-        # Push to ghcr and dockerhub
+        # Push to ghcr
+        docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
+        docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
+        docker push ghcr.io/${{github.repository}}/mase-ci-build:latest
+
+        # Push to dockerhub
         echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
         docker push docker.io/deepwok/mase-docker:$TAG
         docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest

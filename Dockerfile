@@ -15,7 +15,7 @@ RUN apt-get update -y \
                           python3 python3-pip build-essential \
                           libssl-dev git vim wget htop sudo \
                           lld parallel clang-format clang-tidy \
-                          libtinfo5 gcc-multilib libidn11-dev \
+                          libtinfo5 libidn11-dev \
                           locales python3-sphinx graphviz
 
 RUN locale-gen en_US.UTF-8
@@ -84,7 +84,7 @@ RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.or
                     sentencepiece einops deepspeed pybind11 \
                     tabulate tensorboardx hyperopt accelerate \
                     optuna stable-baselines3 h5py scikit-learn \
-                    scipy onnxruntime matplotlib nni sphinx-rtd-theme \
+                    scipy onnxruntime matplotlib sphinx-rtd-theme \
                     imageio imageio-ffmpeg opencv-python kornia einops \
                     ghp-import optimum pytest-profiling myst_parser \
                     pytest-cov pytest-xdist pytest-sugar pytest-html \

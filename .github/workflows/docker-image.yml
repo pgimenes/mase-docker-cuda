@@ -3,6 +3,8 @@ name: Docker Image Build
 on:
   push:
     branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
 
@@ -19,10 +21,16 @@ jobs:
         docker build --build-arg VHLS_PATH=/mnt/applications/Xilinx/23.1 \
         --build-arg VHLS_VERSION=2023.1 \
         -f Dockerfile \
-        --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . 
+        --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . || exit 1
 
-        # Push to ghcr and dockerhub
+        # Push to ghcr
+        docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
+        docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
+        docker push ghcr.io/${{github.repository}}/mase-ci-build:latest
+
+        # Push to dockerhub
         echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
+        docker tag ghcr.io/${{github.repository}}/mase-ci-build:latest docker.io/deepwok/mase-docker:$TAG
         docker push docker.io/deepwok/mase-docker:$TAG
         docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest
         docker push docker.io/deepwok/mase-docker:latest

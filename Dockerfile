@@ -88,6 +88,7 @@ RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.or
                     imageio imageio-ffmpeg opencv-python kornia einops \
                     ghp-import optimum pytest-profiling myst_parser \
                     pytest-cov pytest-xdist pytest-sugar pytest-html \
+                    lightning \
     && pip install -U Pillow
 
 # Add environment variables

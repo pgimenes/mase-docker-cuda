@@ -89,7 +89,8 @@ RUN pip3 install --pre torchvision --extra-index-url https://download.pytorch.or
                     ghp-import optimum pytest-profiling myst_parser \
                     pytest-cov pytest-xdist pytest-sugar pytest-html \
                     lightning \
-    && pip install -U Pillow
+    && pip install -U Pillow \
+    && pip install mpmath==1.3.0 
 
 # Add environment variables
 ARG VHLS_PATH

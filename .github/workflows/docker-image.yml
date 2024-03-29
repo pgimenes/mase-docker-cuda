@@ -23,14 +23,22 @@ jobs:
         -f Dockerfile \
         --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . || exit 1
 
-        # Push to ghcr
-        docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
-        docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
-        docker push ghcr.io/${{github.repository}}/mase-ci-build:latest
+        if [ "${{ secrets.MASE_DOCKER_CRED }}" != "" ]; then
+          # Push to ghcr
+          docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
+          docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
+          docker push ghcr.io/${{github.repository}}/mase-ci-build:latest
 
-        # Push to dockerhub
-        echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
-        docker tag ghcr.io/${{github.repository}}/mase-ci-build:latest docker.io/deepwok/mase-docker:$TAG
-        docker push docker.io/deepwok/mase-docker:$TAG
-        docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest
-        docker push docker.io/deepwok/mase-docker:latest
+          # Push to dockerhub
+          echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
+          docker tag ghcr.io/${{github.repository}}/mase-ci-build:latest docker.io/deepwok/mase-docker:$TAG
+          docker push docker.io/deepwok/mase-docker:$TAG
+          docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest
+          docker push docker.io/deepwok/mase-docker:latest
+          echo "MASE Docker image pushed."
+        else
+          echo "Skipped pushing docker image."
+        fi
+
+
+

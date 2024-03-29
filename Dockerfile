@@ -85,7 +85,7 @@ RUN pip3 install onnx black toml GitPython colorlog cocotb[bus]==1.8.0 \
                     imageio imageio-ffmpeg opencv-python kornia einops \
                     ghp-import optimum pytest-profiling myst_parser \
                     pytest-cov pytest-xdist pytest-sugar pytest-html \
-                    lightning wandb bitarray \
+                    lightning wandb bitarray bitstring \
     && pip install -U Pillow \
     && pip install mpmath==1.3.0 
 

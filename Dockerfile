@@ -68,7 +68,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.10 100 \
     && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.11 200 \
     && update-alternatives --config python3
-RUN apt install -y python3.11-dev
+RUN apt install -y python3.11-dev unzip
 
 CMD ["bash"]
 
@@ -87,7 +87,7 @@ RUN pip3 install onnx black toml GitPython colorlog cocotb[bus]==1.8.0 \
                  imageio imageio-ffmpeg opencv-python kornia einops \
                  ghp-import optimum pytest-profiling myst_parser \
                  pytest-cov pytest-xdist pytest-sugar pytest-html \
-                 lightning wandb bitarray bitstring emoji \
+                 lightning wandb bitarray bitstring emoji torch_geometric \
     && pip install -U Pillow \
     && pip install mpmath==1.3.0 
 
@@ -112,7 +112,14 @@ RUN printf "\
 \nexport PS1=\"[\\\\\\[\$(tput setaf 3)\\\\\\]\\\t\\\\\\[\$(tput setaf 2)\\\\\\] \\\u\\\\\\[\$(tput sgr0)\\\\\\]@\\\\\\[\$(tput setaf 2)\\\\\\]\\\h \\\\\\[\$(tput setaf 7)\\\\\\]\\\w \\\\\\[\$(tput sgr0)\\\\\\]] \\\\\\[\$(tput setaf 6)\\\\\\]$ \\\\\\[\$(tput sgr0)\\\\\\]\" \
 \nexport LS_COLORS='rs=0:di=01;96:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01' \
 \nalias ls='ls --color' \
-\nalias grep='grep --color'\n" >> /root/.bashrc
+\nalias grep='grep --color' \
+\nexport WORKAREA=/workspace \
+\nsource /mnt/applications/Xilinx/23.1/Vivado/2023.1/settings64.sh \
+\nsource /mnt/applications/Xilinx/23.1/Vitis/2023.1/settings64.sh \
+\n# Modelsim \
+\nexport PATH=\"/mnt/applications/mentor/questasim/bin:$PATH\" \
+\nexport PATH=\"/mnt/applications/mentor/questasim/linux_x86_64:$PATH\" \
+\nLD_LIBRARY_PATH=vish \n" >> /root/.bashrc
 
 #Add vim environment
 RUN printf "\

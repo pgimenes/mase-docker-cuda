@@ -17,24 +17,18 @@ jobs:
     - name: Build the Docker image
       run: |
         TAG=$(date -u +%Y%m%d%H%M%S)
-        echo ${{secrets.MASE_DOCKER_CRED}} | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+
         docker build --build-arg VHLS_PATH=/mnt/applications/Xilinx/23.1 \
-        --build-arg VHLS_VERSION=2023.1 \
-        -f Dockerfile \
-        --tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG . || exit 1
+          --build-arg VHLS_VERSION=2023.1 \
+          -f Dockerfile \
+          --tag docker.io/deepwok/mase-docker-cuda:$TAG . || exit 1
 
-        if [ "${{ secrets.MASE_DOCKER_CRED }}" != "" ]; then
-          # Push to ghcr
-          docker push ghcr.io/${{github.repository}}/mase-ci-build:$TAG
-          docker tag ghcr.io/${{github.repository}}/mase-ci-build:$TAG ghcr.io/${{github.repository}}/mase-ci-build:latest
-          docker push ghcr.io/${{github.repository}}/mase-ci-build:latest
-
-          # Push to dockerhub
+        # Push to dockerhub
+        if [ "${{ secrets.DOCKER_HUB_PASSWORD }}" != "" ]; then
           echo ${{secrets.DOCKER_HUB_PASSWORD}} | docker login docker.io -u deepwok --password-stdin
-          docker tag ghcr.io/${{github.repository}}/mase-ci-build:latest docker.io/deepwok/mase-docker:$TAG
-          docker push docker.io/deepwok/mase-docker:$TAG
-          docker tag docker.io/deepwok/mase-docker:$TAG docker.io/deepwok/mase-docker:latest
-          docker push docker.io/deepwok/mase-docker:latest
+          docker push docker.io/deepwok/mase-docker-cuda:$TAG
+          docker tag docker.io/deepwok/mase-docker-cuda:$TAG docker.io/deepwok/mase-docker-cuda:latest
+          docker push docker.io/deepwok/mase-docker-cuda:latest
           echo "MASE Docker image pushed."
         else
           echo "Skipped pushing docker image."

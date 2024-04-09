@@ -76,7 +76,7 @@ CMD ["bash"]
 RUN pip3 install --upgrade pip
 RUN pip3 install --pre torch-mlir torchvision \
                  -f https://github.com/llvm/torch-mlir-release/releases/expanded_assets/dev-wheels \
-                 --extra-index-url https://download.pytorch.org/whl/nightly/cpu
+                 --extra-index-url https://download.pytorch.org/whl/nightly/cu121
 RUN pip3 install onnx black toml GitPython colorlog cocotb[bus]==1.8.0 \
                  pytest pytorch-lightning transformers toml \
                  timm pytorch-nlp datasets ipython ipdb \
